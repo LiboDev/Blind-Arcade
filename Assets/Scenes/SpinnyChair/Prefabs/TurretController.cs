@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CandyCoded.HapticFeedback;
 
 public class TurretController : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class TurretController : MonoBehaviour
 
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private Sound[] sounds;
+
+    //
 
     //tracking
     private MobileControls mobileControls;
@@ -21,9 +24,12 @@ public class TurretController : MonoBehaviour
 
     private int enemiesDefeated;
 
+    private GameObject hoveredEnemy;
+
     // Start is called before the first frame update
     void Start()
     {
+
         mobileControls = GetComponent<MobileControls>();
         initialRotation = transform.rotation;
     }
@@ -40,11 +46,22 @@ public class TurretController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward) * 100f, out hit, 20f, 1 << 4))
         {
+            if(hoveringEnemy == false)
+            {
+                Debug.Log("vibrate"); //vibrate
+                hoveredEnemy = hit.transform.gameObject;
+                hoveredEnemy.GetComponent<AudioSource>().volume = 1;
+                HapticFeedback.LightFeedback();
+            }
             hoveringEnemy = true;
-            Handheld.Vibrate();
         }
         else
         {
+            if(hoveredEnemy != null)
+            {
+                hoveredEnemy.GetComponent<AudioSource>().volume = 0.1f;
+            }
+            
             hoveringEnemy = false;
         }
 
@@ -93,6 +110,7 @@ public class TurretController : MonoBehaviour
     {
         if(other.gameObject.tag == "Enemy")
         {
+
             Destroy(other.gameObject);
             //play sfx
             PlaySFX("GameOver");

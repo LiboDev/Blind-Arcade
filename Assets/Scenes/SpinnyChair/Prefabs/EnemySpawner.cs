@@ -21,6 +21,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Sound[] sounds;
 
     //tracking
+    private Sound[] enemySources;
+
     public int wave = 1;
 
     // Start is called before the first frame update
