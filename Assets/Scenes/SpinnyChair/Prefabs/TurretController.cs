@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CandyCoded.HapticFeedback;
 
 public class TurretController : MonoBehaviour
 {
@@ -51,7 +50,6 @@ public class TurretController : MonoBehaviour
                 Debug.Log("vibrate"); //vibrate
                 hoveredEnemy = hit.transform.gameObject;
                 hoveredEnemy.GetComponent<AudioSource>().volume = 1;
-                HapticFeedback.LightFeedback();
             }
             hoveringEnemy = true;
         }
