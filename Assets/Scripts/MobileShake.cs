@@ -23,7 +23,7 @@ public class MobileShake : MonoBehaviour
     {
         magnitude = Input.acceleration.magnitude;
 
-        if (magnitude > 3 && canShake)
+        if (magnitude > 2 && canShake)
         {
             shake = true;
             canShake = false;
@@ -38,7 +38,7 @@ public class MobileShake : MonoBehaviour
 
     private IEnumerator Shake()
     {
-        yield return null;
+        yield return new WaitForSeconds(0.03f);
         shake = false;
     }
 

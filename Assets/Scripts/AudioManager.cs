@@ -17,9 +17,11 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("set volume");
+
         //setting volume when new scene loaded
-        float sfxVolume = PlayerPrefs.GetFloat("sfxVolume");
-        float musicVolume = PlayerPrefs.GetFloat("musicVolume");
+        float sfxVolume = PlayerPrefs.GetFloat("sfxVolume", 10);
+        float musicVolume = PlayerPrefs.GetFloat("musicVolume", 10);
 
         SFXVolume(sfxVolume);
         MusicVolume(musicVolume);
