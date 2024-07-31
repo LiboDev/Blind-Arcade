@@ -20,8 +20,10 @@ public class AudioManager : MonoBehaviour
         Debug.Log("set volume");
 
         //setting volume when new scene loaded
-        float sfxVolume = PlayerPrefs.GetFloat("sfxVolume", 10);
-        float musicVolume = PlayerPrefs.GetFloat("musicVolume", 10);
+        float sfxVolume = PlayerPrefs.GetFloat("sfxVolume", 1);
+        float musicVolume = PlayerPrefs.GetFloat("musicVolume", 1);
+
+        sfxVolume = 1;
 
         SFXVolume(sfxVolume);
         MusicVolume(musicVolume);
@@ -69,10 +71,10 @@ public class AudioManager : MonoBehaviour
                     Destroy(gameObject);
                 }*/
 
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+/*        if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             PLayMusic("MainMenu");
-        }
+        }*/
     }
 
     public void PLayMusic(string name)
@@ -112,12 +114,12 @@ public class AudioManager : MonoBehaviour
     {
         if (volume <= 0.01)
         {
-            audioMixer.SetFloat("SFX", -80f);
+            audioMixer.SetFloat("Volume", -80f);
             PlayerPrefs.SetFloat("sfxVolume", -80f);
             return;
         }
 
-        audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("Volume", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("sfxVolume", volume);
     }
 }
