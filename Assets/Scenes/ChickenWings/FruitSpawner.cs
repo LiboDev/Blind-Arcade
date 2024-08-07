@@ -8,8 +8,9 @@ public class FruitSpawner : MonoBehaviour
     [SerializeField] private GameObject fruit;
     private GameObject fruitObject;
 
+    [SerializeField] private GameObject gameOverObject;
+
     //tracking
-    private int level = 0;
     private float speed = 5f;
     
     private bool gameOver = false;
@@ -20,7 +21,7 @@ public class FruitSpawner : MonoBehaviour
         StartCoroutine(SpawnFruit());
     }
 
-    private IEnumerator SpawnFruit()
+    public IEnumerator SpawnFruit()
     {
         fruitObject = Instantiate(fruit, new Vector3(50, 0, 0), Quaternion.identity);
         fruitObject.GetComponent<Rigidbody>().velocity = new Vector3(-speed,0,0);
@@ -43,5 +44,6 @@ public class FruitSpawner : MonoBehaviour
     public void GameOver()
     {
         gameOver = true;
+        gameOverObject.SetActive(true);
     }
 }

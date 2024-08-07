@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 41318ed616dde764cbded84e008400a3
   - enabled: 1
+    path: Assets/Scenes/ChickenWings/ChickenWings.unity
+    guid: 3b51ca01d25e1ba498ea0428e0f5f732
+  - enabled: 1
     path: Assets/Scenes/SpinnyChair/SpinnyChair.unity
     guid: 4f7f59d1a8f2d7d45976fcf7b437a79c
   - enabled: 1

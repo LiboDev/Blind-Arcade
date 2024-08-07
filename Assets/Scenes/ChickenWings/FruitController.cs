@@ -6,14 +6,18 @@ public class FruitController : MonoBehaviour
 {
     public float speed;
 
+    void Start()
+    {
+
+    }
+
     void Update()
     {
         if (transform.position.x / speed < 1)
         {
             //haptic feedback
-            Debug.Log("JUMPPPPP");
-            HapticFeedbackController.HapticFeedback();
             Handheld.Vibrate();
+            Debug.Log("JUMPPPPP");
 
             enabled = false;
         }

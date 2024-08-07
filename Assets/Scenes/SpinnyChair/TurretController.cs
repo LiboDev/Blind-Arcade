@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RDG;
 
 public class TurretController : MonoBehaviour
 {
@@ -9,10 +10,11 @@ public class TurretController : MonoBehaviour
 
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private Sound[] sounds;
-
     //
 
     //tracking
+    [SerializeField] private GameObject gameOverObject;
+
     private MobileControls mobileControls;
     private Quaternion initialRotation;
     private float topDownRotation;
@@ -46,7 +48,9 @@ public class TurretController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward) * 100f, out hit, 20f, 1 << 4))
         {
-            if(hoveringEnemy == false)
+            Vibration.Vibrate(100, 25);
+
+            if (hoveringEnemy == false)
             {
                 Debug.Log("vibrate"); //vibrate
                 hoveredEnemy = hit.transform.gameObject;
@@ -58,6 +62,8 @@ public class TurretController : MonoBehaviour
         {
             if(hoveredEnemy != null)
             {
+                Vibration.Cancel();
+
                 hoveredEnemy.GetComponent<AudioSource>().volume = 0.1f;
             }
             
@@ -75,8 +81,7 @@ public class TurretController : MonoBehaviour
     private IEnumerator Shoot(RaycastHit hit, bool didHit)
     {
         canShoot = false;
-
-        PlaySFX("Shoot");
+        PlaySFX("Shoot",0.05f, 0.5f);
 
         if (didHit == true)
         {
@@ -85,14 +90,14 @@ public class TurretController : MonoBehaviour
             if (rb.velocity.magnitude >= 5)
             {
                 rb.velocity /= 2f;
-                PlaySFX("Damage");
+                PlaySFX("Damage", 0.05f, 1f);
                 Debug.Log("hit");
             }
             else
             {
                 Destroy(hit.transform.gameObject);
                 //play sfx
-                PlaySFX("Destroy");
+                PlaySFX("Destroy", 0.05f,1f);
                 Debug.Log("destroy");
             }
         }
@@ -100,6 +105,8 @@ public class TurretController : MonoBehaviour
         {
             Debug.Log("miss");
         }
+
+        Vibration.VibratePredefined(0);
 
         yield return new WaitForSeconds(0.25f);
         canShoot = true;
@@ -109,19 +116,24 @@ public class TurretController : MonoBehaviour
     {
         if(other.gameObject.tag == "Enemy")
         {
-
             Destroy(other.gameObject);
             //play sfx
-            PlaySFX("GameOver");
-            PlaySFX("SelfDestruct");
+            PlaySFX("GameOver",0,1);
+            PlaySFX("SelfDestruct",0.05f,1);
             //gameover
 
             enemySpawner.GameOver();
             Debug.Log("GAME OVER \n YOUR SCORE: " + enemySpawner.wave);
+
+            gameOverObject.SetActive(true);
+
+            Vibration.Vibrate(200, 100);
+
+            enabled = false;
         }
     }
 
-    private void PlaySFX(string name)
+    private void PlaySFX(string name, float variation, float volume)
     {
         Sound s = null;
 
@@ -133,7 +145,7 @@ public class TurretController : MonoBehaviour
             }
         }
 
-        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.pitch = Random.Range(1f - variation, 1f + variation);
 
         if (s == null)
         {
@@ -141,7 +153,7 @@ public class TurretController : MonoBehaviour
         }
         else
         {
-            audioSource.PlayOneShot(s.clip);
+            audioSource.PlayOneShot(s.clip, volume);
         }
     }
 }

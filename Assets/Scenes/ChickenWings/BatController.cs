@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RDG;
 
 public class BatController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class BatController : MonoBehaviour
     private AudioSource audioSource;
 
     //tracking
-    private bool canJump = true;
+    private bool canJump = false;
     public int score = 0;
 
 
@@ -97,10 +98,12 @@ public class BatController : MonoBehaviour
         if (other.gameObject.name.Contains("Floor") && canJump == false)
         {
             PlaySFX("land", 0.05f);
+            Vibration.VibratePredefined(0);
             canJump = true;
         }
         else if (other.gameObject.name.Contains("Fruit") && enabled == true)
         {
+            Vibration.Vibrate(200, 100);
             Destroy(other.gameObject);
             GameObject.Find("FruitSpawner").GetComponent<FruitSpawner>().GameOver();
             GameOver();

@@ -50,7 +50,7 @@ public class EnemySpawner : MonoBehaviour
 
             //next wave
             wave++;
-            PlaySFX("NextWave");
+            PlaySFX("NextWave",0f,1f);
             yield return new WaitForSeconds(spawnDelay * 2f);
         }
     }
@@ -78,7 +78,7 @@ public class EnemySpawner : MonoBehaviour
         //enabled = false;
     }
 
-    private void PlaySFX(string name)
+    private void PlaySFX(string name, float variation, float volume)
     {
         Sound s = null;
 
@@ -90,15 +90,13 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        audioSource.pitch = Random.Range(0.9f, 1.1f);
-
         if (s == null)
         {
             Debug.LogError("SoundNotFound");
         }
         else
         {
-            audioSource.PlayOneShot(s.clip);
+            audioSource.PlayOneShot(s.clip, volume);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RDG;
 
 public class CarController : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class CarController : MonoBehaviour
 
     [SerializeField] private Sound[] sounds;
     private AudioSource audioSource;
+
+    [SerializeField] private AudioSource engineAudio;
 
     //tracking
     private float speed = 10f;
@@ -35,12 +38,12 @@ public class CarController : MonoBehaviour
         if(magnitude < 0.05f)
         {
             rb.velocity = new Vector3(0, 0, 0);
-            engine.position = new Vector3(0, 0, -2);
+            //engine.position = new Vector3(0, 0, -2);
         }
         else if (magnitude < 0.5f)
         {
             rb.velocity = new Vector3(mobileSteering.dirX, 0, 0) * speed;
-            engine.position = new Vector3(mobileSteering.dirX, 0, -2);
+            //engine.position = new Vector3(mobileSteering.dirX, 0, -2);
         }
         else
         {
@@ -49,11 +52,20 @@ public class CarController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            PlaySFX("Honk", 0.01f);
+            PlaySFX("Honk", 0.01f,0.5f);
+        }
+
+        if (Mathf.Abs(transform.position.x)<9.49f)
+        {
+            engineAudio.volume = rb.velocity.magnitude / 5f;
+        }
+        else
+        {
+            engineAudio.volume = 0;
         }
     }
 
-    private void PlaySFX(string name, float variation)
+    private void PlaySFX(string name, float variation, float volume)
     {
         Sound s = null;
 
@@ -73,7 +85,7 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            audioSource.PlayOneShot(s.clip);
+            audioSource.PlayOneShot(s.clip, volume);
         }
     }
 
@@ -81,12 +93,17 @@ public class CarController : MonoBehaviour
     {
         if (other.gameObject.name.Contains("Coin"))
         {
-            PlaySFX("Coin",0.05f);
+            PlaySFX("Coin",0.01f, 0.5f);
 
             Destroy(other.gameObject);
             score++;
 
             Debug.Log("Score: " + score);
+        }
+        else if (other.gameObject.name.Contains("Quad"))
+        {
+            PlaySFX("Hit", 0.01f,1f);
+            Vibration.VibratePredefined(1);
         }
     }
 
@@ -96,9 +113,11 @@ public class CarController : MonoBehaviour
         {
             Destroy(other.gameObject);
 
-            PlaySFX("GameOver",0f);
+            PlaySFX("GameOver",0f,1f);
+            Vibration.Vibrate(200, 100);
 
             coinSpawner.gameOver = true;
+            engineAudio.volume = 0;
 
             Debug.Log("Final Score: " + score);
             enabled = false;

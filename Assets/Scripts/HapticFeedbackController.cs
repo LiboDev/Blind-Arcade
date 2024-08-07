@@ -1,42 +1,107 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
 public class HapticFeedbackController : MonoBehaviour
 {
-    private class HapticFeedbackManager
+    private AndroidJavaObject vibrator;
+
+    void Start()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        private int HapticFeedbackConstantsKey;
-        private AndroidJavaObject UnityPlayer;
-#endif
+        // Get the current Android activity
+        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
 
-        public HapticFeedbackManager()
-        {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            HapticFeedbackConstantsKey=new AndroidJavaClass("android.view.HapticFeedbackConstants").GetStatic<int>("VIRTUAL_KEY");
-            UnityPlayer=new AndroidJavaClass ("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity").Get<AndroidJavaObject>("mUnityPlayer");
-            //Alternative way to get the UnityPlayer:
-            //int content=new AndroidJavaClass("android.R$id").GetStatic<int>("content");
-            //new AndroidJavaClass ("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity").Call<AndroidJavaObject>("findViewById",content).Call<AndroidJavaObject>("getChildAt",0);
-#endif
-        }
+        // Get the Vibrator service
+        vibrator = activity.Call<AndroidJavaObject>("getSystemService", "vibrator");
+    }
 
-        public bool Execute()
+    // Method to vibrate briefly for click feedback
+    public void VibrateClick()
+    {
+        if (vibrator != null)
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-            return UnityPlayer.Call<bool> ("performHapticFeedback",HapticFeedbackConstantsKey);
-#endif
-            return false;
+            if (AndroidVersion >= 26)
+            {
+                // For Android 8.0 (API level 26) and above
+                VibratePattern(new long[] { 0, 30 }, -1);
+            }
+            else
+            {
+                // For devices below Android 8.0
+                vibrator.Call("vibrate", 30); // Vibrate for 30 milliseconds
+            }
         }
     }
 
-    //Cache the Manager for performance
-    private static HapticFeedbackManager mHapticFeedbackManager;
-
-    public static bool HapticFeedback()
+    public void VibratePattern(long[] pattern, int repeat)
     {
-        if (mHapticFeedbackManager == null)
+        if (vibrator != null)
         {
-            mHapticFeedbackManager = new HapticFeedbackManager();
+            // Check Android version to use VibrationEffect API
+            if (AndroidVersion >= 26)
+            {
+                // Use the VibrationEffect class for API level 26 and above
+                using (AndroidJavaClass vibrationEffectClass = new AndroidJavaClass("android.os.VibrationEffect"))
+                {
+                    if (vibrationEffectClass != null)
+                    {
+                        // Create the vibration effect
+                        AndroidJavaObject vibrationEffect = vibrationEffectClass.CallStatic<AndroidJavaObject>("createWaveform", pattern, repeat);
+
+                        if (vibrationEffect != null)
+                        {
+                            // Vibrate using the created effect
+                            vibrator.Call("vibrate", vibrationEffect);
+                        }
+                        else
+                        {
+                            Debug.LogError("Failed to create vibration effect.");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to get VibrationEffect class.");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Vibration patterns are not supported on this Android version. Using basic vibration.");
+                // Fallback for devices below API level 26
+                vibrator.Call("vibrate", pattern[0]); // Vibrate for the first duration in pattern as a fallback
+            }
         }
-        return mHapticFeedbackManager.Execute();
+        else
+        {
+            Debug.LogError("Vibrator service is not initialized.");
+        }
+    }
+
+    public void Vibrate(long milliseconds)
+    {
+        if (vibrator != null)
+        {
+            vibrator.Call("vibrate", milliseconds);
+        }
+    }
+
+    public void CancelVibration()
+    {
+        if (vibrator != null)
+        {
+            vibrator.Call("cancel");
+        }
+    }
+
+    private int AndroidVersion
+    {
+        get
+        {
+            using (AndroidJavaClass versionClass = new AndroidJavaClass("android.os.Build$VERSION"))
+            {
+                return versionClass.GetStatic<int>("SDK_INT");
+            }
+        }
     }
 }
