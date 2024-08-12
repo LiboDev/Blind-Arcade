@@ -15,8 +15,8 @@ EditorBuildSettings:
     path: Assets/Scenes/SpinnyChair/SpinnyChair.unity
     guid: 4f7f59d1a8f2d7d45976fcf7b437a79c
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Surgeon/Surgeon.unity
+    guid: c7806d22092c6b74db22b06403bc1689
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 1a770bf9298a8f14bbf9aefea510545a,
       type: 2}
