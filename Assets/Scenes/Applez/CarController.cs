@@ -17,6 +17,8 @@ public class CarController : MonoBehaviour
 
     [SerializeField] private AudioSource engineAudio;
 
+    [SerializeField] private GameObject gameOverObject;
+
     //tracking
     private float speed = 10f;
     private int score = 0;
@@ -55,14 +57,14 @@ public class CarController : MonoBehaviour
             PlaySFX("Honk", 0.01f,0.5f);
         }
 
-        if (Mathf.Abs(transform.position.x)<9.49f)
+/*        if (Mathf.Abs(transform.position.x)<9.49f)
         {
             engineAudio.volume = rb.velocity.magnitude / 5f;
         }
         else
         {
             engineAudio.volume = 0;
-        }
+        }*/
     }
 
     private void PlaySFX(string name, float variation, float volume)
@@ -100,11 +102,11 @@ public class CarController : MonoBehaviour
 
             Debug.Log("Score: " + score);
         }
-        else if (other.gameObject.name.Contains("Quad"))
+/*        else if (other.gameObject.name.Contains("Quad"))
         {
             PlaySFX("Hit", 0.01f,1f);
             Vibration.VibratePredefined(1);
-        }
+        }*/
     }
 
     void OnTriggerEnter(Collider other)
@@ -120,6 +122,8 @@ public class CarController : MonoBehaviour
             engineAudio.volume = 0;
 
             Debug.Log("Final Score: " + score);
+
+            gameOverObject.SetActive(true);
             enabled = false;
         }
     }

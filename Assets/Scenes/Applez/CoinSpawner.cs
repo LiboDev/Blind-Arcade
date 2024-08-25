@@ -28,15 +28,40 @@ public class CoinSpawner : MonoBehaviour
         StartCoroutine(SpawnCoin());
     }
 
+    private IEnumerator FirstCoin()
+    {
+        x++;
+        speed = Mathf.Log(x, 10) * 5f;
+        Debug.Log("speed:" + speed);
+
+        pos = -5;
+
+        coinObject = Instantiate(coin, new Vector3(pos, 0, 25), Quaternion.identity);
+        coinObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -speed);
+
+        StartCoroutine(Direction());
+
+        yield return new WaitForSeconds(30f / speed);
+
+        if (gameOver == false)
+        {
+            StartCoroutine(SpawnCoin());
+        }
+        else
+        {
+            enabled = false;
+        }
+    }
+
     private IEnumerator SpawnCoin()
     {
         x++;
-        speed = Mathf.Log(x,10) * 5f;
+        speed = Mathf.Log(x, 10) * 5f;
         Debug.Log("speed:" + speed);
 
         pos = Random.Range(-10f, 10f);
 
-        coinObject = Instantiate(coin, new Vector3(pos ,0, 25), Quaternion.identity);
+        coinObject = Instantiate(coin, new Vector3(pos, 0, 25), Quaternion.identity);
         coinObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -speed);
 
         StartCoroutine(Direction());
@@ -73,7 +98,7 @@ public class CoinSpawner : MonoBehaviour
                 Debug.Log("Left");
                 audioSource.panStereo = -1;
                 audioSource.pitch = 0.95f;
-                audioSource.volume = (20 - distance)/20f;
+                audioSource.volume = (20 - distance) / 20f;
             }
             else if (pos > car.transform.position.x)
             {
@@ -84,7 +109,7 @@ public class CoinSpawner : MonoBehaviour
                 audioSource.volume = (20 - distance) / 20f;
             }
             audioSource.Play();
-            yield return new WaitForSeconds(Mathf.Max(coinObject.transform.position.z/20,0.25f));
+            yield return new WaitForSeconds(Mathf.Max(coinObject.transform.position.z / 20, 0.25f));
         }
     }
 }

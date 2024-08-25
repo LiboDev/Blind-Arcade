@@ -20,7 +20,7 @@ public class GameOver : MonoBehaviour
         while (true)
         {
             //reload scene
-            if (mobileShake.magnitude >= 3)
+            if (mobileShake.shake == true)
             {
                 int sceneIndex = SceneManager.GetActiveScene().buildIndex;
                 SceneManager.LoadScene(sceneIndex);

@@ -6,9 +6,11 @@ public class FruitController : MonoBehaviour
 {
     public float speed;
 
+    private BatController batController;
+
     void Start()
     {
-
+        batController = GameObject.Find("Player").GetComponent<BatController>();
     }
 
     void Update()
@@ -16,8 +18,8 @@ public class FruitController : MonoBehaviour
         if (transform.position.x / speed < 1)
         {
             //haptic feedback
-            Handheld.Vibrate();
-            Debug.Log("JUMPPPPP");
+
+            batController.Vibrate();
 
             enabled = false;
         }

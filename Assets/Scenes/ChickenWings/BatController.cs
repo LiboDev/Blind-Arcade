@@ -61,6 +61,15 @@ public class BatController : MonoBehaviour
         }
     }
 
+    public void Vibrate()
+    {
+        if(score < 5)
+        {
+            Handheld.Vibrate();
+            Debug.Log("JUMPPPPP");
+        }
+    }
+
     public void GameOver()
     {
         PlaySFX("Lose", 0.05f);

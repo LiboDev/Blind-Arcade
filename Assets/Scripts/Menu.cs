@@ -15,7 +15,7 @@ public class Menu : MonoBehaviour
 
     private void Start()
     {
-
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
     }
 
@@ -61,13 +61,13 @@ public class Menu : MonoBehaviour
     {
         canScroll = false;
 
-        float pos = Input.mousePosition.x;
+        float pos = Input.mousePosition.y;
 
         yield return new WaitUntil(() => Input.GetMouseButtonUp(0));
 
-        float newPos = Input.mousePosition.x;
+        float newPos = Input.mousePosition.y;
 
-        if (Mathf.Abs(pos-newPos) > Screen.width/8)
+        if (Mathf.Abs(pos-newPos) > Screen.height/16)
         {
             Vibration.Vibrate(100, 100);
 
