@@ -68,6 +68,7 @@ public class CoinSpawner : MonoBehaviour
 
         yield return new WaitForSeconds(30f / speed);
 
+
         if (gameOver == false)
         {
             StartCoroutine(SpawnCoin());
@@ -109,6 +110,7 @@ public class CoinSpawner : MonoBehaviour
                 audioSource.volume = (20 - distance) / 20f;
             }
             audioSource.Play();
+
             yield return new WaitForSeconds(Mathf.Max(coinObject.transform.position.z / 20, 0.25f));
         }
     }

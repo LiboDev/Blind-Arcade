@@ -22,9 +22,9 @@ public class EnemyController : MonoBehaviour
 
         bc.size = new Vector3(distance, distance, distance);
 
-        if(distance < 3)
+/*        if(distance < 3)
         {
             Vibration.Vibrate((long)(5-distance)*100, 100);
-        }
+        }*/
     }
 }

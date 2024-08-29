@@ -49,9 +49,41 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitUntil(() => transform.childCount == 0);
 
             //next wave
+            StartCoroutine(Score());
             wave++;
-            PlaySFX("NextWave",0f,1f);
+            
             yield return new WaitForSeconds(spawnDelay * 2f);
+        }
+    }
+
+    private IEnumerator Score()
+    {
+        if(wave == 100)
+        {
+            PlaySFX("NextWave", 0f, 1f);
+            GameOver();
+        }
+
+        int ones = wave % 10;
+
+        Debug.Log(ones);
+
+        int tens = ((wave-ones)/10) % 10;
+
+        Debug.Log(tens);
+
+        for (int i = 0;i < tens; i++)
+        {
+            PlaySFX("10", 0f, 1f);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < ones; i++)
+        {
+            PlaySFX("01", 0f, 1f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 

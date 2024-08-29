@@ -275,12 +275,16 @@ MonoBehaviour:
   player: {fileID: 1910449161}
   audioSource: {fileID: 858968194}
   enemy: {fileID: 6384716368431994570, guid: 94cac765e828fda4f856d724fc28142e, type: 3}
-  spawnDistance: 20
+  spawnDistance: 30
   maxSpeed: 10
   spawnDelay: 2
   sounds:
   - name: NextWave
     clip: {fileID: 8300000, guid: 3347f305c84cd7f409dd0f2fd3cedd7c, type: 3}
+  - name: 01
+    clip: {fileID: 8300000, guid: d5b5c107306cd284588cf959c672ffe3, type: 3}
+  - name: 10
+    clip: {fileID: 8300000, guid: f9cf662969ab6dc42ab0a73bbec326cb, type: 3}
   wave: 1
 --- !u!4 &858968193
 Transform:

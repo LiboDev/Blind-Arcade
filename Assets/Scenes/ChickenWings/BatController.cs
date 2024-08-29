@@ -60,6 +60,36 @@ public class BatController : MonoBehaviour
         
         }
     }
+    private IEnumerator Score()
+    {
+        if (score == 100)
+        {
+            PlaySFX("NextWave", 0f);
+            GameOver();
+        }
+
+        int ones = score % 10;
+
+        Debug.Log(ones);
+
+        int tens = ((score - ones) / 10) % 10;
+
+        Debug.Log(tens);
+
+        for (int i = 0; i < tens; i++)
+        {
+            PlaySFX("10", 0f);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < ones; i++)
+        {
+            PlaySFX("01", 0f);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
 
     public void Vibrate()
     {
@@ -115,6 +145,9 @@ public class BatController : MonoBehaviour
             Vibration.Vibrate(200, 100);
             Destroy(other.gameObject);
             GameObject.Find("FruitSpawner").GetComponent<FruitSpawner>().GameOver();
+
+            Score();
+
             GameOver();
         }
     }
@@ -125,6 +158,8 @@ public class BatController : MonoBehaviour
         {
             PlaySFX("Point", 0.05f);
             score++;
+
+            Score();
         }
     }
 }

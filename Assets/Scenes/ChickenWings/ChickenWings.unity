@@ -280,6 +280,12 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 79eff3d2643707d4089b2c6190fbc6c5, type: 3}
   - name: Point
     clip: {fileID: 8300000, guid: 4801e9935bc6a814f99c5364cef8efe7, type: 3}
+  - name: 01
+    clip: {fileID: 8300000, guid: d5b5c107306cd284588cf959c672ffe3, type: 3}
+  - name: 10
+    clip: {fileID: 8300000, guid: f9cf662969ab6dc42ab0a73bbec326cb, type: 3}
+  - name: NextWave
+    clip: {fileID: 8300000, guid: 3347f305c84cd7f409dd0f2fd3cedd7c, type: 3}
   score: 0
 --- !u!82 &261283673
 AudioSource:

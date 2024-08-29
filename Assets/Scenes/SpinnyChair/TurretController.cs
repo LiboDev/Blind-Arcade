@@ -42,11 +42,11 @@ public class TurretController : MonoBehaviour
         //set rotation
         transform.rotation = mobileControls.rot;
         topDownRotation = (Mathf.Atan2(-transform.right.x - transform.position.x, -transform.right.z - transform.position.z)) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, topDownRotation+90, 0);
+        transform.rotation = Quaternion.Euler(0, topDownRotation-90, 0);
 
         //raycast
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward) * 100f, out hit, 20f, 1 << 4))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward) * 100f, out hit, 50f, 1 << 4))
         {
             Vibration.Vibrate(100, 25);
 
@@ -75,7 +75,7 @@ public class TurretController : MonoBehaviour
             StartCoroutine(Shoot(hit, hoveringEnemy));
         }
 
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.yellow);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000f, Color.yellow);
     }
 
     private IEnumerator Shoot(RaycastHit hit, bool didHit)
@@ -108,7 +108,7 @@ public class TurretController : MonoBehaviour
 
         Vibration.VibratePredefined(0);
 
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.5f);
         canShoot = true;
     }
 

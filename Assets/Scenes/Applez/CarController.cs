@@ -67,6 +67,37 @@ public class CarController : MonoBehaviour
         }*/
     }
 
+    private IEnumerator Score()
+    {
+        if (score == 100)
+        {
+            PlaySFX("NextWave", 0f, 1f);
+            GameOver();
+        }
+
+        int ones = score % 10;
+
+        Debug.Log(ones);
+
+        int tens = ((score - ones) / 10) % 10;
+
+        Debug.Log(tens);
+
+        for (int i = 0; i < tens; i++)
+        {
+            PlaySFX("10", 0f, 1f);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < ones; i++)
+        {
+            PlaySFX("01", 0f, 1f);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
     private void PlaySFX(string name, float variation, float volume)
     {
         Sound s = null;
@@ -101,6 +132,8 @@ public class CarController : MonoBehaviour
             score++;
 
             Debug.Log("Score: " + score);
+
+            StartCoroutine(Score());
         }
 /*        else if (other.gameObject.name.Contains("Quad"))
         {
@@ -115,16 +148,22 @@ public class CarController : MonoBehaviour
         {
             Destroy(other.gameObject);
 
-            PlaySFX("GameOver",0f,1f);
-            Vibration.Vibrate(200, 100);
-
-            coinSpawner.gameOver = true;
-            engineAudio.volume = 0;
-
-            Debug.Log("Final Score: " + score);
-
-            gameOverObject.SetActive(true);
-            enabled = false;
+            GameOver();
         }
+    }
+
+    private void GameOver()
+    {
+        PlaySFX("GameOver", 0f, 1f);
+        Vibration.Vibrate(200, 100);
+
+        coinSpawner.gameOver = true;
+        engineAudio.volume = 0;
+
+        Debug.Log("Final Score: " + score);
+        StartCoroutine(Score());
+
+        gameOverObject.SetActive(true);
+        enabled = false;
     }
 }

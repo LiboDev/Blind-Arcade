@@ -713,6 +713,12 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: bc0b84d7580576c449ba1cae96ef1b72, type: 3}
   - name: Hit
     clip: {fileID: 8300000, guid: 668f829b51780504a96319365ce86f36, type: 3}
+  - name: 01
+    clip: {fileID: 8300000, guid: d5b5c107306cd284588cf959c672ffe3, type: 3}
+  - name: 10
+    clip: {fileID: 8300000, guid: f9cf662969ab6dc42ab0a73bbec326cb, type: 3}
+  - name: NextWave
+    clip: {fileID: 8300000, guid: 3347f305c84cd7f409dd0f2fd3cedd7c, type: 3}
   engineAudio: {fileID: 1921575357}
   gameOverObject: {fileID: 2117883885}
 --- !u!65 &624042472
