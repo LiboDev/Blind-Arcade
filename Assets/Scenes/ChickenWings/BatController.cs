@@ -60,13 +60,10 @@ public class BatController : MonoBehaviour
         
         }
     }
+
     private IEnumerator Score()
     {
-        if (score == 100)
-        {
-            PlaySFX("NextWave", 0f);
-            GameOver();
-        }
+        yield return new WaitForSeconds(3f);
 
         int ones = score % 10;
 
@@ -146,7 +143,7 @@ public class BatController : MonoBehaviour
             Destroy(other.gameObject);
             GameObject.Find("FruitSpawner").GetComponent<FruitSpawner>().GameOver();
 
-            Score();
+            StartCoroutine(Score());
 
             GameOver();
         }
@@ -156,10 +153,14 @@ public class BatController : MonoBehaviour
     {
         if (other.gameObject.name.Contains("Fruit"))
         {
+            if (score == 100)
+            {
+                PlaySFX("NextWave", 0f);
+                GameOver();
+            }
+
             PlaySFX("Point", 0.05f);
             score++;
-
-            Score();
         }
     }
 }

@@ -48,21 +48,23 @@ public class EnemySpawner : MonoBehaviour
 
             yield return new WaitUntil(() => transform.childCount == 0);
 
+            if (wave == 100)
+            {
+                PlaySFX("NextWave", 0f, 1f);
+                GameOver();
+            }
+
             //next wave
-            StartCoroutine(Score());
             wave++;
-            
+            PlaySFX("NextWave", 0f, 1f);
+
             yield return new WaitForSeconds(spawnDelay * 2f);
         }
     }
 
     private IEnumerator Score()
     {
-        if(wave == 100)
-        {
-            PlaySFX("NextWave", 0f, 1f);
-            GameOver();
-        }
+        yield return new WaitForSeconds(3f);
 
         int ones = wave % 10;
 
@@ -106,8 +108,16 @@ public class EnemySpawner : MonoBehaviour
     public void GameOver()
     {
         StopAllCoroutines();
-        gameObject.SetActive(false);
-        //enabled = false;
+
+        StartCoroutine(Score());
+
+        //gameObject.SetActive(false);
+        enabled = false;
+
+        for(int i = 0; i< transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
     }
 
     private void PlaySFX(string name, float variation, float volume)

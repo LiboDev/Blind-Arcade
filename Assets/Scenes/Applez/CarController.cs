@@ -69,11 +69,7 @@ public class CarController : MonoBehaviour
 
     private IEnumerator Score()
     {
-        if (score == 100)
-        {
-            PlaySFX("NextWave", 0f, 1f);
-            GameOver();
-        }
+        yield return new WaitForSeconds(3f);
 
         int ones = score % 10;
 
@@ -131,9 +127,13 @@ public class CarController : MonoBehaviour
             Destroy(other.gameObject);
             score++;
 
-            Debug.Log("Score: " + score);
+            if (score == 100)
+            {
+                PlaySFX("NextWave", 0f, 1f);
+                GameOver();
+            }
 
-            StartCoroutine(Score());
+            Debug.Log("Score: " + score);
         }
 /*        else if (other.gameObject.name.Contains("Quad"))
         {
