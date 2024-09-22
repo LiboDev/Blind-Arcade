@@ -7,9 +7,10 @@ public class MobileCompass : MonoBehaviour
     public float rot;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Input.compass.enabled = true;
+        rot = Input.compass.trueHeading;
     }
 
     // Update is called once per frame

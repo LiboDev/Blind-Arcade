@@ -69,7 +69,7 @@ public class Menu : MonoBehaviour
 
         if (Mathf.Abs(pos-newPos) > Screen.height/16)
         {
-            Vibration.Vibrate(100, 100);
+            //Vibration.Vibrate(100, 100);
 
             if (newPos - pos > 0)
             {
@@ -99,7 +99,7 @@ public class Menu : MonoBehaviour
             for(int i = 0; i < sceneIndex; i++)
             {
                 Vibration.VibratePredefined(0);
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.1f);
             }
 
             Debug.Log("SceneIndex: " + sceneIndex);

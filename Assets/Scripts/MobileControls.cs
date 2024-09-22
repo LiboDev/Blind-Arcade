@@ -7,9 +7,10 @@ public class MobileControls : MonoBehaviour
     public Quaternion rot = Quaternion.identity;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Input.gyro.enabled = true;
+        rot = GyroToUnity(Input.gyro.attitude);
     }
 
     // Update is called once per frame

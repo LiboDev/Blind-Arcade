@@ -6,6 +6,7 @@ using RDG;
 public class TurretController : MonoBehaviour
 {
     //scene
+    [SerializeField] private Transform enemyController;
     [SerializeField] private EnemySpawner enemySpawner;
 
     [SerializeField] private AudioSource audioSource;
@@ -17,8 +18,8 @@ public class TurretController : MonoBehaviour
 
     private MobileControls mobileControls;
     private Quaternion initialRotation;
+    private float initialTopDownRotation;
     private float topDownRotation;
-    private float previousTopDownRotation;
 
     private bool canShoot = true;
 
@@ -33,16 +34,24 @@ public class TurretController : MonoBehaviour
     {
 
         mobileControls = GetComponent<MobileControls>();
-        initialRotation = transform.rotation;
+
+        transform.rotation = mobileControls.rot;
+        initialTopDownRotation = (Mathf.Atan2(-transform.right.x - transform.position.x, -transform.right.z - transform.position.z)) * Mathf.Rad2Deg;
+
+        Debug.Log(mobileControls.rot);
+        Debug.Log(initialTopDownRotation);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //set rotation
         transform.rotation = mobileControls.rot;
         topDownRotation = (Mathf.Atan2(-transform.right.x - transform.position.x, -transform.right.z - transform.position.z)) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, topDownRotation-90, 0);
+        topDownRotation -= initialTopDownRotation;
+        Debug.Log(topDownRotation);
+
+        transform.rotation = Quaternion.Euler(0, topDownRotation, 0);
 
         //raycast
         RaycastHit hit;
@@ -53,8 +62,8 @@ public class TurretController : MonoBehaviour
             if (hoveringEnemy == false)
             {
                 Debug.Log("vibrate"); //vibrate
-                hoveredEnemy = hit.transform.gameObject;
-                hoveredEnemy.GetComponent<AudioSource>().volume = 1;
+                //hoveredEnemy = hit.transform.gameObject;
+                //hoveredEnemy.GetComponent<AudioSource>().volume = 1;
             }
             hoveringEnemy = true;
         }
@@ -64,10 +73,29 @@ public class TurretController : MonoBehaviour
             {
                 Vibration.Cancel();
 
-                hoveredEnemy.GetComponent<AudioSource>().volume = 0.1f;
+                //hoveredEnemy.GetComponent<AudioSource>().volume = 0.25f;
+                hoveredEnemy= null;
             }
             
             hoveringEnemy = false;
+        }
+
+        for(int i = 0; i< enemyController.childCount; i++)
+        {
+            GameObject child = enemyController.GetChild(i).gameObject;
+
+            if (child != hoveredEnemy)
+            {
+                float difference;
+
+                float angle = Mathf.Atan2(child.transform.position.x, child.transform.position.z) * Mathf.Rad2Deg;
+
+                difference = Mathf.Abs(angle - (topDownRotation));
+
+                child.GetComponent<AudioSource>().volume = Mathf.Max((45f-difference)/45f,0.1f);
+
+                //Debug.Log(difference);
+            }
         }
 
         if (Input.GetMouseButton(0) && canShoot)
@@ -99,6 +127,9 @@ public class TurretController : MonoBehaviour
                 //play sfx
                 PlaySFX("Destroy", 0.05f,1f);
                 Debug.Log("destroy");
+
+                hoveringEnemy = false;
+                hoveredEnemy= null;
             }
         }
         else

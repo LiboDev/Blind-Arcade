@@ -23,10 +23,26 @@ public class FruitSpawner : MonoBehaviour
 
     public IEnumerator SpawnFruit()
     {
-        fruitObject = Instantiate(fruit, new Vector3(50, 0, 0), Quaternion.identity);
-        fruitObject.GetComponent<Rigidbody>().velocity = new Vector3(-speed,0,0);
-        fruitObject.GetComponent<FruitController>().speed = speed;
-        fruitObject.GetComponent<AudioSource>().pitch = Random.Range(0.95f, 1.05f);
+        InstantiateFruit();
+
+        float rand = Random.Range(0, 3);
+
+        //try and reduce tripple probability
+        if(rand == 2)
+        {
+            rand = Random.Range(1,3);
+        }
+
+        //spawn extra "fruits"
+        if(speed >= 10 && rand != 0)
+        {
+            for(int i = 0; i < rand; i++)
+            {
+                yield return new WaitForSeconds(0.5f);
+
+                InstantiateFruit();
+            }
+        }
 
         yield return new WaitForSeconds(51f/speed);
         
@@ -39,6 +55,14 @@ public class FruitSpawner : MonoBehaviour
         {
             StartCoroutine(SpawnFruit());
         }
+    }
+
+    private void InstantiateFruit()
+    {
+        fruitObject = Instantiate(fruit, new Vector3(50, 0, 0), Quaternion.identity);
+        fruitObject.GetComponent<Rigidbody>().velocity = new Vector3(-speed, 0, 0);
+        fruitObject.GetComponent<FruitController>().speed = speed;
+        fruitObject.GetComponent<AudioSource>().pitch = Random.Range(0.95f, 1.05f);
     }
 
     public void GameOver()
