@@ -72,12 +72,10 @@ public class CarController : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         int ones = score % 10;
-
-        Debug.Log(ones);
-
         int tens = ((score - ones) / 10) % 10;
 
         Debug.Log(tens);
+        Debug.Log(ones);
 
         for (int i = 0; i < tens; i++)
         {

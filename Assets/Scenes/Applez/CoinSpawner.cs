@@ -97,17 +97,17 @@ public class CoinSpawner : MonoBehaviour
             {
                 //play left sound effect
                 Debug.Log("Left");
-                audioSource.panStereo = -1;
+                audioSource.panStereo = -0.75f;
                 audioSource.pitch = 0.95f;
-                audioSource.volume = (20 - distance) / 20f;
+                audioSource.volume = Mathf.Max(0.05f,(20 - distance) / 20f);
             }
             else if (pos > car.transform.position.x)
             {
                 //play right sound effect
                 Debug.Log("Right");
-                audioSource.panStereo = 1;
+                audioSource.panStereo = 0.75f;
                 audioSource.pitch = 0.95f;
-                audioSource.volume = (20 - distance) / 20f;
+                audioSource.volume = Mathf.Max(0.05f, (20 - distance) / 20f);
             }
             audioSource.Play();
 
