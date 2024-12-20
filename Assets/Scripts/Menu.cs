@@ -7,16 +7,40 @@ using RDG;
 public class Menu : MonoBehaviour
 {
     [SerializeField] private MobileShake mobileShake;
+    [SerializeField] AudioSource speechAudioSource;
+    [SerializeField] AudioSource numberAudioSource;
 
     private int sceneIndex = 0;
     [SerializeField] private int maxSceneIndex;
 
+    [SerializeField] private List<AudioClip> numberVoiceLine;
+
     private bool canScroll = true;
+
+    private int mainCount = 0;
 
     private void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
+        //tutorial recording
+        speechAudioSource.Play();
+
+        mainCount = PlayerPrefs.GetInt("MainCount",0);
+        PlayerPrefs.SetInt("MainCount", mainCount++);
+
+        Debug.Log("MainCount = " + mainCount);
+
+        if (mainCount != 0)
+        {
+            StartCoroutine(CancelAudio());
+        }
+    }
+
+    private IEnumerator CancelAudio()
+    {
+        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+        speechAudioSource.Stop();
     }
 
 /*    private IEnumerator HapticTester()
@@ -101,6 +125,8 @@ public class Menu : MonoBehaviour
                 Vibration.VibratePredefined(0);
                 yield return new WaitForSeconds(0.1f);
             }
+
+            speechAudioSource.PlayOneShot(numberVoiceLine[sceneIndex-1], 1f);
 
             Debug.Log("SceneIndex: " + sceneIndex);
         }

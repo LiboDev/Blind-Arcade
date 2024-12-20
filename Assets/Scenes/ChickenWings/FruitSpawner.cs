@@ -8,7 +8,7 @@ public class FruitSpawner : MonoBehaviour
     [SerializeField] private GameObject fruit;
     private GameObject fruitObject;
 
-    [SerializeField] private GameObject gameOverObject;
+    [SerializeField] private GameManager gameManager;
 
     //tracking
     private float speed = 5f;
@@ -23,14 +23,14 @@ public class FruitSpawner : MonoBehaviour
 
     public IEnumerator SpawnFruit()
     {
-        InstantiateFruit();
+        
 
         float rand = Random.Range(0, 3);
 
-        //try and reduce tripple probability
+        //reduce tripple probability
         if(rand == 2)
         {
-            rand = Random.Range(1,3);
+            rand = Random.Range(0,3);
         }
 
         //spawn extra "fruits"
@@ -38,11 +38,12 @@ public class FruitSpawner : MonoBehaviour
         {
             for(int i = 0; i < rand; i++)
             {
+                InstantiateFruit("Fruit" + (i + 1));
                 yield return new WaitForSeconds(0.5f);
-
-                InstantiateFruit();
             }
         }
+
+        InstantiateFruit("Fruit0");
 
         yield return new WaitForSeconds(51f/speed);
         
@@ -57,17 +58,19 @@ public class FruitSpawner : MonoBehaviour
         }
     }
 
-    private void InstantiateFruit()
+    private void InstantiateFruit(string name)
     {
         fruitObject = Instantiate(fruit, new Vector3(50, 0, 0), Quaternion.identity);
         fruitObject.GetComponent<Rigidbody>().velocity = new Vector3(-speed, 0, 0);
         fruitObject.GetComponent<FruitController>().speed = speed;
         fruitObject.GetComponent<AudioSource>().pitch = Random.Range(0.95f, 1.05f);
+
+        fruitObject.name = name;
     }
 
     public void GameOver()
     {
         gameOver = true;
-        gameOverObject.SetActive(true);
+        gameManager.StartCoroutine(gameManager.GameOver());
     }
 }

@@ -7,6 +7,7 @@ public class BatController : MonoBehaviour
 {
 
     //scene
+    [SerializeField] private Transform teleportPos;
     private MobileShake mobileShake;
     private Rigidbody rb;
 
@@ -139,6 +140,7 @@ public class BatController : MonoBehaviour
         }
         else if (other.gameObject.name.Contains("Fruit") && enabled == true)
         {
+            transform.position = teleportPos.position + Vector3.up;
             Vibration.Vibrate(200, 100);
             Destroy(other.gameObject);
             GameObject.Find("FruitSpawner").GetComponent<FruitSpawner>().GameOver();
@@ -151,7 +153,7 @@ public class BatController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("Fruit"))
+        if (other.gameObject.name.Contains("Fruit0"))
         {
             if (score == 100)
             {

@@ -14,7 +14,7 @@ public class TurretController : MonoBehaviour
     //
 
     //tracking
-    [SerializeField] private GameObject gameOverObject;
+    [SerializeField] private GameManager gameManager;
 
     private MobileControls mobileControls;
     private Quaternion initialRotation;
@@ -57,7 +57,7 @@ public class TurretController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward) * 100f, out hit, 50f, 1 << 4))
         {
-            Vibration.Vibrate(100, 25);
+            Vibration.Vibrate(20, 100);
 
             if (hoveringEnemy == false)
             {
@@ -92,7 +92,7 @@ public class TurretController : MonoBehaviour
 
                 difference = Mathf.Abs(angle - (topDownRotation));
 
-                child.GetComponent<AudioSource>().volume = Mathf.Max((45f-difference)/45f,0.1f);
+                child.GetComponent<AudioSource>().volume = Mathf.Max((45f-difference)/45f,0.5f);
 
                 //Debug.Log(difference);
             }
@@ -156,7 +156,7 @@ public class TurretController : MonoBehaviour
             enemySpawner.GameOver();
             Debug.Log("GAME OVER \n YOUR SCORE: " + enemySpawner.wave);
 
-            gameOverObject.SetActive(true);
+            gameManager.StartCoroutine(gameManager.GameOver());
 
             Vibration.Vibrate(200, 100);
 

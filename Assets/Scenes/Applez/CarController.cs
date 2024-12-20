@@ -17,7 +17,7 @@ public class CarController : MonoBehaviour
 
     [SerializeField] private AudioSource engineAudio;
 
-    [SerializeField] private GameObject gameOverObject;
+    [SerializeField] private GameManager gameManager;
 
     //tracking
     private float speed = 10f;
@@ -52,10 +52,10 @@ public class CarController : MonoBehaviour
             rb.velocity = new Vector3(mobileSteering.dirX*0.5f/magnitude, 0, 0) * speed;
         }
 
-        if (Input.GetMouseButtonDown(0))
+/*        if (Input.GetMouseButtonDown(0))
         {
             PlaySFX("Honk", 0.01f,0.5f);
-        }
+        }*/
 
 /*        if (Mathf.Abs(transform.position.x)<9.49f)
         {
@@ -161,7 +161,7 @@ public class CarController : MonoBehaviour
         Debug.Log("Final Score: " + score);
         StartCoroutine(Score());
 
-        gameOverObject.SetActive(true);
+        gameManager.StartCoroutine(gameManager.GameOver());
         enabled = false;
     }
 }
