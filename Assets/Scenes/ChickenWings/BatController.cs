@@ -16,6 +16,8 @@ public class BatController : MonoBehaviour
 
     //tracking
     private bool canJump = false;
+    private bool isJumping = false;
+    private float averageMagnitude = 0;
     public int score = 0;
 
 
@@ -38,28 +40,39 @@ public class BatController : MonoBehaviour
             if (canJump)
             {
                 canJump = false;
-                if(magnitude < 4)
-                {
-                    PlaySFX("Sjump", 0.05f);
-                }
-                else
-                {
-                    PlaySFX("Ljump", 0.05f);
-                }
-            
-                rb.velocity = new Vector3(0,Mathf.Clamp(magnitude, 3,5) * 2,0);
+                isJumping = true;
+
+                StartCoroutine(StopJumping());
             }
 
-            if (magnitude<1)
+            if (isJumping)
             {
-                rb.velocity -= new Vector3(0, 10, 0) * Time.deltaTime;
+                rb.velocity = new Vector3(0, Mathf.Clamp(magnitude, 3, 5) * 2, 0);
             }
-            else
+
+            if (isJumping)
             {
-                rb.velocity += new Vector3(0, magnitude*2, 0) * Time.deltaTime;
+                averageMagnitude += magnitude * Time.deltaTime;
             }
-        
         }
+
+    }
+
+    private IEnumerator StopJumping() {
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (averageMagnitude/0.1f < 4)
+        {
+            PlaySFX("Sjump", 0.05f);
+        }
+        else
+        {
+            PlaySFX("Ljump", 0.05f);
+        }
+
+        averageMagnitude = 0;
+        isJumping = false;
     }
 
     private IEnumerator Score()
@@ -141,6 +154,8 @@ public class BatController : MonoBehaviour
         else if (other.gameObject.name.Contains("Fruit") && enabled == true)
         {
             transform.position = teleportPos.position + Vector3.up;
+            rb.velocity = Vector3.zero;
+
             Vibration.Vibrate(200, 100);
             Destroy(other.gameObject);
             GameObject.Find("FruitSpawner").GetComponent<FruitSpawner>().GameOver();

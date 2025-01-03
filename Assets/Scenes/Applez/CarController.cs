@@ -35,7 +35,7 @@ public class CarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float magnitude = Mathf.Abs(mobileSteering.dirX);
+        float magnitude = Mathf.Abs(mobileSteering.dirY);
 
         if(magnitude < 0.05f)
         {
@@ -44,12 +44,11 @@ public class CarController : MonoBehaviour
         }
         else if (magnitude < 0.5f)
         {
-            rb.velocity = new Vector3(mobileSteering.dirX, 0, 0) * speed;
-            //engine.position = new Vector3(mobileSteering.dirX, 0, -2);
+            rb.velocity = new Vector3(-mobileSteering.dirY, 0, 0) * speed;
         }
         else
         {
-            rb.velocity = new Vector3(mobileSteering.dirX*0.5f/magnitude, 0, 0) * speed;
+            rb.velocity = new Vector3(-mobileSteering.dirY*0.5f/magnitude, 0, 0) * speed;
         }
 
 /*        if (Input.GetMouseButtonDown(0))
@@ -133,11 +132,11 @@ public class CarController : MonoBehaviour
 
             Debug.Log("Score: " + score);
         }
-/*        else if (other.gameObject.name.Contains("Quad"))
+        else if (other.gameObject.name.Contains("Quad"))
         {
-            PlaySFX("Hit", 0.01f,1f);
+            PlaySFX("Hit", 0.01f, 1f);
             Vibration.VibratePredefined(1);
-        }*/
+        }
     }
 
     void OnTriggerEnter(Collider other)
