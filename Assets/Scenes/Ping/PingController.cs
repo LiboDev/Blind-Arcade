@@ -17,7 +17,7 @@ public class PingController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -56,14 +56,8 @@ public class PingController : MonoBehaviour
         {
             score++;
 
-            if(score == 20)
-            {
-                //PlaySFX("Hyper", 0, 1);
-            }
-            else
-            {
-
-            }
+            
+            PlaySFX("Point", 0, 1);
         }
     }
 }

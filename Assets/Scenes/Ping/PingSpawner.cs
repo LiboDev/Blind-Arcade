@@ -26,11 +26,11 @@ public class PingSpawner : MonoBehaviour
         Instantiate(ping, spawnPos, Quaternion.identity);
     }
 
-/*    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.name.Contains("Ball"))
+    /*    void OnTriggerEnter(Collider other)
         {
-            other.GetComponent<BallController>().GameOver();
-        }
-    }*/
+            if (other.gameObject.name.Contains("Ball"))
+            {
+                other.GetComponent<BallController>().GameOver();
+            }
+        }*/
 }

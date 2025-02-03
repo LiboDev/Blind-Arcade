@@ -5,11 +5,15 @@ using UnityEngine;
 public class BallController : MonoBehaviour
 {
     //scene
+    [SerializeField] private Sound[] sounds;
     private AudioSource audioSource;
     private Rigidbody rb;
 
+    
+
     //stats
-    private float speed = 5f;
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float speed = 10f;
 
     //tracking
 
@@ -18,15 +22,38 @@ public class BallController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
         rb = GetComponent<Rigidbody>();
-        rb.velocity = -transform.forward * speed;
+        rb.velocity = transform.forward * speed;
     }
 
-    void Update()
+/*    void Update()
     {
-        if(transform.position.z < -10f)
+        if(transform.position.z > 10f)
         {
             //player game over
-            //gameObject.SetActive(false);
+        }
+    }*/
+
+    private void PlaySFX(string name, float variation, float volume)
+    {
+        Sound s = null;
+
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            if (sounds[i].name == name)
+            {
+                s = sounds[i];
+            }
+        }
+
+        audioSource.pitch = Random.Range(1f - variation, 1f + variation);
+
+        if (s == null)
+        {
+            Debug.LogError("SoundNotFound");
+        }
+        else
+        {
+            audioSource.PlayOneShot(s.clip, volume);
         }
     }
 
@@ -34,11 +61,12 @@ public class BallController : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            speed++;
-            if(speed > 25)
+            if(speed < maxSpeed)
             {
-                speed = 25;
+                //PlaySFX("Bounce", 0.01f, 0.1f);
+                speed++;
             }
+            //PlaySFX("HardBounce", 0.01f, 0.25f);
 
             float difference = transform.position.x - other.transform.position.x;
             Vector3 direction = new Vector3(difference / 2f, 0,1);
@@ -48,7 +76,14 @@ public class BallController : MonoBehaviour
         }
         else if (other.gameObject.tag == "Terrain")
         {
-            audioSource.Play();
+            if(speed < maxSpeed)
+            {
+                PlaySFX("Collide", 0.01f, 0.25f);
+            }
+            else
+            {
+                PlaySFX("Collide", 0.01f, 0.5f);
+            }
         }
     }
 }
